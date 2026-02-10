@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="assignment-detail">
+    <div class="card">
+        <div class="card-head">
+            <h1 class="title">{{ object.title }}</h1>
+            <div class="meta">
+                <span class="meta-item">作成者: <strong>{{ object.owner.username }}</strong></span>
+                <span class="meta-item">作成日時: <time>{{ object.created_at }}</time></span>
+                <span class="meta-item">完了済み: <strong>{{ object.completed }}</strong></span>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <div class="description">{{ object.description|linebreaks }}</div>
+        </div>
+
+        <div class="card-actions">
+            <a class="btn btn-outline" href="{% url 'assignments:update' object.pk %}">編集</a>
+            <a class="btn btn-danger" href="{% url 'assignments:delete' object.pk %}">削除</a>
+            <a class="btn" href="{% url 'assignments:toggle' object.pk %}">完了/未完了切替</a>
+        </div>
+    </div>
+
+    <section class="comments">
+        <h2>コメント</h2>
+        <ul class="comments-list">
+            {% for c in object.comments.all %}
+            <li class="comment-item">
+                <div class="comment-meta"><strong>{{ c.author.username }}</strong> — <time>{{ c.created_at }}</time>
+                </div>
+                <div class="comment-body">{{ c.content|linebreaks }}</div>
+            </li>
+            {% empty %}
+            <li class="comment-empty">コメントはありません</li>
+            {% endfor %}
+        </ul>
+
+        <div class="comment-form-wrap">
+            <h3>コメントを追加</h3>
+            <form class="comment-form" method="post" action="{% url 'assignments:add_comment' object.pk %}">
+                {% csrf_token %}
+                {{ comment_form.as_p }}
+                <button class="btn btn-primary" type="submit">追加</button>
+            </form>
+        </div>
+    </section>
+</div>
+<script src="{% static 'js/app.js' %}"></script>
+{% endblock %}

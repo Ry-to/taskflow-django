@@ -1,3 +1,9 @@
 from django.contrib import admin
+from .models import Assignment
 
-# Register your models here.
+
+@admin.register(Assignment)
+class AssignmentAdmin(admin.ModelAdmin):
+    list_display = ("title", "owner", "completed", "created_at")
+    list_filter = ("completed", "owner")
+    search_fields = ("title", "description")

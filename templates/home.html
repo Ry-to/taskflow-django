@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-inner">
+        <h1 class="hero-title">Taskflow — シンプルでパワフルなタスク管理</h1>
+        <p class="hero-sub">日々のタスクを直感的に管理。直感的なUIと強力なワークフローで生産性を高めます。</p>
+        <div class="hero-ctas">
+            <a class="btn btn-primary" href="{% url 'assignments:index' %}">課題一覧へ</a>
+            {% if request.user.is_authenticated %}
+            <a class="btn" href="{% url 'assignments:create' %}">新しい課題を作成</a>
+            {% else %}
+            <a class="btn" href="{% url 'login' %}?next={% url 'assignments:create' %}">ログインして作成</a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<section class="features">
+    <div class="feature-card">🚀 早く作る — 素早く課題を追加</div>
+    <div class="feature-card">🤝 共有 — チームでコメント</div>
+    <div class="feature-card">📅 見える化 — 期限管理</div>
+</section>
+
+<section class="today">
+    <h2>今日のタスク</h2>
+    <div class="today-inner">
+        <div class="progress-wrap">
+            <svg class="progress-ring" width="140" height="140">
+                <circle class="progress-ring__circle--bg" stroke="rgba(255,255,255,0.06)" stroke-width="12"
+                    fill="transparent" r="56" cx="70" cy="70" />
+                <circle class="progress-ring__circle" stroke="#7dd3fc" stroke-width="12" fill="transparent" r="56"
+                    cx="70" cy="70" stroke-linecap="round" transform="rotate(-90 70 70)" />
+            </svg>
+            <div class="progress-text">
+                <div class="percent">{{ today_percent }}%</div>
+                <div class="sub">{{ today_completed }} / {{ today_total }} 件</div>
+            </div>
+        </div>
+        <div class="today-message">
+            {% if today_total == 0 %}
+            <p>今日は割り当てられたタスクはありません。</p>
+            {% elif today_percent == 100 %}
+            <p class="celebrate">今日のタスククリア！！ 🎉</p>
+            {% else %}
+            <p>今日の達成率: <strong>{{ today_percent }}%</strong></p>
+            <p>残り {{ today_remaining }} 件 をがんばろう！</p>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<script src="{% static 'js/app.js' %}"></script>
+
+{% endblock %}

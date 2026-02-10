@@ -1,14 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-
-<body>
-    <p>Assignments List</p>
-</body>
-
-</html>
+{% block content %}
+<h1>課題一覧</h1>
+<p><a href="{% url 'assignments:create' %}">新しい課題を作成</a></p>
+<ul>
+    {% for a in assignments %}
+    <li>
+        {% if a.completed %}✅{% else %}⬜{% endif %}
+        <a href="{% url 'assignments:detail' a.pk %}">{{ a.title }}</a>
+        — <span class="owner">{{ a.owner.username }}</span>
+        (<a href="{% url 'assignments:toggle' a.pk %}">完了/未完了切替</a>)
+    </li>
+    {% empty %}
+    <li>課題はまだありません。</li>
+    {% endfor %}
+</ul>
+{% endblock %}
