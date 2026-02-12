@@ -29,7 +29,9 @@ SECRET_KEY = "django-insecure-3cb1#mnu7s8hyg7nrxo)1$(5i_&6y5bg7=!@4*nz5lk2!@h=2)
 DEBUG = True
 
 ALLOWED_HOSTS = [h for h in (os.environ.get("ALLOWED_HOSTS") or "").split(",") if h]
-CSRF_TRUSTED_ORIGINS = [u for u in (os.environ.get("CSRF_TRUSTED_ORIGINS") or "").split(",") if u]
+CSRF_TRUSTED_ORIGINS = [
+    u for u in (os.environ.get("CSRF_TRUSTED_ORIGINS") or "").split(",") if u
+]
 
 # When running behind a proxy/loader (e.g. App Runner) that terminates TLS,
 # let Django know the original request scheme so things like redirects and
