@@ -28,8 +28,13 @@ SECRET_KEY = "django-insecure-3cb1#mnu7s8hyg7nrxo)1$(5i_&6y5bg7=!@4*nz5lk2!@h=2)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = (os.environ.get("ALLOWED_HOSTS") or "").split(",")  # deploy for Railway
-CSRF_TRUSTED_ORIGINS = (os.environ.get("CSRF_TRUSTED_ORIGINS") or "").split(",")
+ALLOWED_HOSTS = [h for h in (os.environ.get("ALLOWED_HOSTS") or "").split(",") if h]
+CSRF_TRUSTED_ORIGINS = [u for u in (os.environ.get("CSRF_TRUSTED_ORIGINS") or "").split(",") if u]
+
+# When running behind a proxy/loader (e.g. App Runner) that terminates TLS,
+# let Django know the original request scheme so things like redirects and
+# CSRF origin checks work correctly.
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 
 # Application definition
